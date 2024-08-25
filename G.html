@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menghilangkan /n xlsx dan lainya</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+        .container {
+            margin-bottom: 50px;
+        }
+        button {
+            margin-top: 10px; 
+        }
+        .label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px; /* Jarak antara label dan input file */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="label">Masukan Client</span>
+        <input type="file" id="fileInput1">
+        <button onclick="processFile('fileInput1', 'Member.txt')">Unduh File</button>
+    </div>
+    <div class="container">
+        <span class="label">Masukan Navy</span>
+        <input type="file" id="fileInput2">
+        <button onclick="processFile('fileInput2', 'Navy.txt')">Unduh File</button>
+    </div>
+    <div class="container">
+        <span class="label">Masukan Admin</span>
+        <input type="file" id="fileInput3">
+        <button onclick="processFile('fileInput3', 'Admin.txt')">Unduh File</button>
+    </div>
+
+    <script>
+        function processFile(inputId, fileName) {
+            const fileInput = document.getElementById(inputId);
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                const content = event.target.result;
+
+                const rows = content.split(/\r?\n/);
+                let combinedNumbers = '';
+
+                rows.forEach(row => {
+                    const columns = row.split(/\s+/);
+
+                    columns.forEach(number => {
+                        if (number.trim()) {
+                            combinedNumbers += number.trim() + '\n';
+                        }
+                    });
+                });
+
+                const blob = new Blob([combinedNumbers.trim()], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
+
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>
