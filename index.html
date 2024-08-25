@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menghilangkan /n xlsx dan lainya</title>
+    <title>GLOO</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 30px;
+            margin: 20px;
         }
         .container {
-            margin-bottom: 50px;
+            margin-bottom: 30px; /* Jarak antar kontainer */
         }
         button {
-            margin-top: 10px; 
+            margin-top: 10px; /* Jarak antara input file dan tombol */
         }
         .label {
             display: block;
@@ -48,7 +48,12 @@
             reader.onload = function(event) {
                 const content = event.target.result;
 
-                const rows = content.split(/\r?\n/);
+                // Hapus karakter-karakter yang tidak diinginkan
+                const cleanedContent = content
+                    .replace(/[+ .0:)]/g, '') // Hapus +, spasi, .0, :, ), .
+                    .replace(/:\)/g, '');   // Hapus :)
+
+                const rows = cleanedContent.split(/\r?\n/);
                 let combinedNumbers = '';
 
                 rows.forEach(row => {
