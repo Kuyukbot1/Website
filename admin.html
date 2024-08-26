@@ -43,7 +43,26 @@
                     <!-- Daftar user akan dimuat di sini -->
                 </tbody>
             </table>
-        </div>
+        <div class="card mt-5">
+    <div class="card-body">
+        <h5 class="card-title">Ganti Password Admin</h5>
+        <form id="changeAdminPasswordForm">
+            <div class="form-group">
+                <label for="currentPassword">Password Saat Ini</label>
+                <input type="password" class="form-control" id="currentPassword" placeholder="Masukkan password saat ini" required>
+            </div>
+            <div class="form-group">
+                <label for="newAdminPassword">Password Baru</label>
+                <input type="password" class="form-control" id="newAdminPassword" placeholder="Masukkan password baru" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmNewAdminPassword">Konfirmasi Password Baru</label>
+                <input type="password" class="form-control" id="confirmNewAdminPassword" placeholder="Konfirmasi password baru" required>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="changeAdminPassword()">Ganti Password</button>
+            <p id="changePasswordSuccess" style="display:none;" class="text-success mt-2">Password berhasil diubah!</p>
+        </form>
+    </div>
     </div>
 
     <script src="admin.js"></script>
