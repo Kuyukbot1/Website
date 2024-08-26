@@ -5,23 +5,28 @@ if (!localStorage.getItem('users')) {
         anonymous: { password: "anonymous", expires: null }  // User default tanpa tanggal kadaluarsa
     }));
 }
+
 // Fungsi login
 function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const loginError = document.getElementById('loginError');
+
     // Ambil data users dari localStorage
     const users = JSON.parse(localStorage.getItem('users'));
+
     // Cek apakah username ada dalam daftar dan password sesuai
     if (users[username]) {
         // Cek apakah user sudah kadaluarsa
         const expires = users[username].expires;
         const currentDate = new Date();
+
         if (expires && new Date(expires) < currentDate) {
             loginError.textContent = 'Akun ini telah kadaluarsa.';
             loginError.style.display = 'block';
             return;
         }
+
         // Cek password
         if (users[username].password === password) {
             if (username === 'admin') {
