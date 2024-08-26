@@ -1,3 +1,23 @@
+// Fungsi untuk memastikan akun admin selalu ada
+function ensureAdminAccount() {
+    const users = JSON.parse(localStorage.getItem('users')) || {};
+
+    if (!users['admin']) {
+        users['admin'] = {
+            password: 'admin', // Password default untuk admin
+            expires: null
+        };
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Akun admin tidak ditemukan. Akun admin baru telah dibuat dengan password default "admin". Harap ganti password segera.');
+    }
+}
+
+// Panggil fungsi ini saat halaman admin dimuat
+document.addEventListener('DOMContentLoaded', function() {
+    ensureAdminAccount();
+    loadUserList();
+});
+
 // Fungsi untuk menambah user baru atau memperbarui user yang sudah ada
 function addUser() {
     const newUsername = document.getElementById('newUsername').value;
@@ -77,6 +97,3 @@ function loadUserList() {
         `;
     }
 }
-
-// Panggil fungsi ini saat halaman admin dimuat untuk menampilkan daftar user
-document.addEventListener('DOMContentLoaded', loadUserList);
