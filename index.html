@@ -1,85 +1,121 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GLOO</title>
+    <title>Gabung Kolom ke Satu Kolom</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
+        .btn-custom {
+            padding: 10px 20px; /* Atur padding tombol */
+            font-size: 16px; /* Ukuran font tombol */
         }
-        .container {
-            margin-bottom: 30px; 
+        .form-group.custom-margin {
+            margin-bottom: 1rem; /* Jarak antar elemen form */
         }
-        button {
-            margin-top: 10px; 
-        }
-        .label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px; 
+        #output {
+            display: none; /* Menyembunyikan hasil awal */
+            white-space: pre-wrap; /* Menampilkan hasil dengan spasi dan baris baru */
         }
     </style>
 </head>
-<body>
+<body class="bg-light">
     <div class="container">
-        <span class="label">Masukan Client</span>
-        <input type="file" id="fileInput1">
-        <button onclick="processFile('fileInput1', 'Member.txt')">Unduh File</button>
-    </div>
-    <div class="container">
-        <span class="label">Masukan Navy</span>
-        <input type="file" id="fileInput2">
-        <button onclick="processFile('fileInput2', 'Navy.txt')">Unduh File</button>
-    </div>
-    <div class="container">
-        <span class="label">Masukan Admin</span>
-        <input type="file" id="fileInput3">
-        <button onclick="processFile('fileInput3', 'Admin.txt')">Unduh File</button>
+        <h1 class="text-center mt-5">Gabung Kolom dari File TXT Menjadi 1 Kolom</h1>
+        
+        <div class="mt-4">
+            <form id="fileForm">
+                <div class="form-group custom-margin">
+                    <label for="fileInput">Pilih file .txt:</label>
+                    <input type="file" id="fileInput" class="form-control" accept=".txt" required>
+                </div>
+                <div class="form-group custom-margin">
+                    <label for="outputFileName">Nama File Output:</label>
+                    <input type="text" id="outputFileName" class="form-control" placeholder="Nama file output" required>
+                </div>
+                <button type="button" onclick="processFile()" class="btn btn-primary btn-custom">Proses</button>
+            </form>
+
+            <div id="outputSection" class="mt-4">
+                <button id="toggleOutput" onclick="toggleOutput()" class="btn btn-secondary btn-custom mb-3">Tampilkan Hasil</button>
+                <h3>Hasil:</h3>
+                <pre id="output"></pre>
+                <a id="downloadLink" class="btn btn-success btn-custom">Download File Gabungan</a>
+            </div>
+        </div>
     </div>
 
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script>
-        function processFile(inputId, fileName) {
-            const fileInput = document.getElementById(inputId);
+        function processFile() {
+            const fileInput = document.getElementById('fileInput');
+            const output = document.getElementById('output');
+            const downloadLink = document.getElementById('downloadLink');
+            const outputFileName = document.getElementById('outputFileName').value;
+            const toggleButton = document.getElementById('toggleOutput');
+
+            if (fileInput.files.length === 0) {
+                alert('Pilih file .txt terlebih dahulu');
+                return;
+            }
+            if (!outputFileName) {
+                alert('Masukkan nama file output');
+                return;
+            }
+
             const file = fileInput.files[0];
             const reader = new FileReader();
 
-            reader.onload = function(event) {
-                const content = event.target.result;
+            reader.onload = function(e) {
+                const lines = e.target.result.split('\n');
+                let columns = lines.map(line => line.split(/\s+/));
 
-                // Hapus karakter-karakter yang tidak diinginkan
-                const cleanedContent = content
-                    .replace(/[+ .0:)]/g, '') // Hapus +, spasi, .0, :, ), .
-                    .replace(/:\)/g, '');   // Hapus :)
-
-                const rows = cleanedContent.split(/\r?\n/);
-                let combinedNumbers = '';
-
-                rows.forEach(row => {
-                    const columns = row.split(/\s+/);
-
-                    columns.forEach(number => {
-                        if (number.trim()) {
-                            combinedNumbers += number.trim() + '\n';
+                // Menggabungkan kolom-kolom ke dalam satu array
+                let combinedLines = [];
+                for (let col = 0; col < columns[0].length; col++) {
+                    for (let row = 0; row < columns.length; row++) {
+                        if (columns[row][col] !== undefined && columns[row][col] !== '') {
+                            combinedLines.push(columns[row][col]);
                         }
-                    });
-                });
+                    }
+                }
 
-                const blob = new Blob([combinedNumbers.trim()], { type: 'text/plain' });
+                // Menggabungkan hasil menjadi string tunggal dengan setiap elemen di baris baru
+                const resultText = combinedLines.join('\n');
+
+                // Menampilkan hasil di halaman
+                output.textContent = resultText;
+                output.style.display = 'block';
+
+                // Membuat file untuk diunduh
+                const blob = new Blob([resultText], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
+                downloadLink.href = url;
+                downloadLink.download = outputFileName;
+                downloadLink.textContent = 'Download File Gabungan';
 
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = fileName;
-                document.body.appendChild(a);
-                a.click();
-
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
+                // Mengubah teks tombol toggle
+                toggleButton.textContent = 'Sembunyikan Hasil';
             };
 
             reader.readAsText(file);
+        }
+
+        function toggleOutput() {
+            const output = document.getElementById('output');
+            const toggleButton = document.getElementById('toggleOutput');
+
+            if (output.style.display === 'none') {
+                output.style.display = 'block';
+                toggleButton.textContent = 'Sembunyikan Hasil';
+            } else {
+                output.style.display = 'none';
+                toggleButton.textContent = 'Tampilkan Hasil';
+            }
         }
     </script>
 </body>
