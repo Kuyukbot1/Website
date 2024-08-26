@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabung Kolom ke Satu Kolom</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .btn-custom {
+            padding: 10px 20px; /* Atur padding tombol */
+            font-size: 16px; /* Ukuran font tombol */
+        }
+        .form-group.custom-margin {
+            margin-bottom: 1rem; /* Jarak antar elemen form */
+        }
+        #output {
+            display: none; /* Menyembunyikan hasil awal */
+            white-space: pre-wrap; /* Menampilkan hasil dengan spasi dan baris baru */
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container">
+        <h1 class="text-center mt-5">Gabung Kolom dari File TXT Menjadi 1 Kolom</h1>
+        
+        <div class="mt-4">
+            <form id="fileForm">
+                <div class="form-group custom-margin">
+                    <label for="fileInput">Pilih file .txt:</label>
+                    <input type="file" id="fileInput" class="form-control" accept=".txt" required>
+                </div>
+                <div class="form-group custom-margin">
+                    <label for="outputFileName">Nama File Output:</label>
+                    <input type="text" id="outputFileName" class="form-control" placeholder="Nama file output" required>
+                </div>
+                <button type="button" onclick="processFile()" class="btn btn-primary btn-custom">Proses</button>
+            </form>
+
+            <div id="outputSection" class="mt-4">
+                <button id="toggleOutput" onclick="toggleOutput()" class="btn btn-secondary btn-custom mb-3">Tampilkan Hasil</button>
+                <h3>Hasil:</h3>
+                <pre id="output"></pre>
+                <a id="downloadLink" class="btn btn-success btn-custom">Download File Gabungan</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
